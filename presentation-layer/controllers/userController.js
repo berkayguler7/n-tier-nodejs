@@ -1,4 +1,4 @@
-import userService from '../../business_logic_layer/services/userService.js';
+import userService from '../../business-logic-layer/services/userService.js';
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 

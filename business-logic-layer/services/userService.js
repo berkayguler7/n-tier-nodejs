@@ -1,4 +1,4 @@
-import User from '../../data_access_layer/models/userModel.js';
+import User from '../../data-access-layer/models/userModel.js';
 
 async function getAllUsers() {
     return await User.findAll({ attributes: { exclude: ['password'] } });

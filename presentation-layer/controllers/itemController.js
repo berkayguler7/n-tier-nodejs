@@ -1,4 +1,4 @@
-import itemService from '../../business_logic_layer/services/itemService.js';
+import itemService from '../../business-logic-layer/services/itemService.js';
 
 export async function getAllItems(req, res) {
     try {

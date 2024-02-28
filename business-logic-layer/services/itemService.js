@@ -1,4 +1,4 @@
-import Item from '../../data_access_layer/models/itemModel.js';
+import Item from '../../data-access-layer/models/itemModel.js';
 
 async function getAllItems() {
     return await Item.findAll();

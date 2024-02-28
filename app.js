@@ -1,6 +1,6 @@
 import express, { json } from 'express';
-import routes from './presentation_layer/routes/index.js';
-import { sequelize } from './data_access_layer/dbConfig.js';
+import routes from './presentation-layer/routes/index.js';
+import { sequelize } from './data-access-layer/dbConfig.js';
 import dotenv from 'dotenv';
 
 const app = express();
