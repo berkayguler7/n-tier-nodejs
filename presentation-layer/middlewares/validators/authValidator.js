@@ -11,7 +11,7 @@ export async function validateRegister(req, res, next) {
         await schema.validateAsync(req.body);
         next();
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        res.status(417).json({ error: error.message });
     }
 }
 
