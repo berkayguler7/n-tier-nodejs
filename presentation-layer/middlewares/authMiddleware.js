@@ -4,18 +4,21 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 export const authMiddleware = (req, res, next) => {
-    const token = req.header('auth-token');
-    if (!token) return res.status(401).json({ error: 'Access denied' });
+    const accessToken = req.header('Authorization');
+    const refreshToken = req.cookies?.refreshToken;
+    if (!accessToken && !refreshToken) return res.status(401).json({ error: 'Access denied' });
     try {
-        jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decoded) => {
-            if (err) {
-                return res.status(400).json({ error: 'Invalid token' });
-            }
-            req.user = decoded;
-            console.log(decoded);
-        });
+        const decoded = jwt.verify(accessToken, process.env.JWT_SECRET_KEY);
+        req.user = decoded;
         next();
     } catch (error) {
-        res.status(400).json({ error: 'Invalid token' });
+        if(!refreshToken) return res.status(401).json({ error: 'Invalid token' });
+        jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET_KEY, (err, decoded) => {
+            if (err) return res.status(401).json({ error: 'Invalid token' });
+            const newAccessToken = jwt.sign({ id: decoded.id }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
+            res.header('Authorization', newAccessToken);
+            req.user = decoded;
+            next();
+        });
     }
 };

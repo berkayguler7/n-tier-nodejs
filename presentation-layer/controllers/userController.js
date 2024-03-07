@@ -34,8 +34,12 @@ export async function loginUser(req, res) {
         if (!user) {
             return res.status(400).json({ error: 'Invalid email or password' });
         }
-        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET_KEY);
-        res.header('auth-token', token).json({ token });
+        const accessToken = jwt.sign({ id: user.id }, process.env.JWT_SECRET_KEY, { expiresIn: '1h' });
+        const refreshToken = jwt.sign({ id: user.id }, process.env.JWT_REFRESH_SECRET_KEY, { expiresIn: '1d' })
+        res
+            .cookie('refreshToken', refreshToken, { httpOnly: true, sameSite: 'strict' })
+            .header('Authorization', accessToken)
+            .send(user);
     }
     catch (error) {
         res.status(500).json({ error: error.message });
